@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Exercise List</title>
+</head>
+<body>
+
+    <h1>All Exercises</h1>
+
+    <% exercises.forEach(exercise => { %>
+
+        <hr>
+
+        <h3><%= exercise.exerciseName %></h3>
+
+        <p>
+            Muscle Group:
+            <%= exercise.muscleGroup %>
+        </p>
+
+        <p>
+            Sets:
+            <%= exercise.sets %>
+        </p>
+
+        <p>
+            Reps:
+            <%= exercise.reps %>
+        </p>
+
+    <% }) %>
+
+    <br>
+
+    /
+
+</body>
+</html>
