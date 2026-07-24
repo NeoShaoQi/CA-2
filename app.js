@@ -57,7 +57,7 @@ app.post('/addWorkout', (req, res) => {
 
     db.query(
         sql,
-        [workoutName, workoutType, duration],
+        [ workoutName,workoutType,duration,calories],
         (err, result) => {
 
             if (err) throw err;
