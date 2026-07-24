@@ -82,7 +82,7 @@ app.get('/addWorkout', isAuthenticated, (req, res) => {
 // Added calories field into workout creation.
 // ==========================================================
 
-app.post('/addWorkout', isAuthenticated, (req, res) => {
+app.post('/addWorkout', isAuthenticated,isAdmin, (req, res) => {
 
     const {
         workoutName,
@@ -117,20 +117,38 @@ app.post('/addWorkout', isAuthenticated, (req, res) => {
 });
 
 
-// View Workouts
-app.get('/workouts', (req, res) => {
+// ====================
+// VIEW WORKOUTS
+// ====================
 
-    const sql = 'SELECT * FROM workouts';
+app.get('/workouts', isAuthenticated, (req, res) => {
 
-    db.query(sql, (err, results) => {
+    const search = req.query.search || '';
 
-        if (err) throw err;
+    const sql = `
+        SELECT *
+        FROM workouts
+        WHERE workoutName LIKE ?
+           OR workoutType LIKE ?
+    `;
 
-        res.render('workouts', {
-            workouts: results
-        });
+    db.query(
+        sql,
+        [
+            `%${search}%`,
+            `%${search}%`
+        ],
+        (err, results) => {
 
-    });
+            if (err) throw err;
+
+            res.render('workouts', {
+                workouts: results,
+                search: search
+            });
+
+        }
+    );
 
 });
 
@@ -263,27 +281,45 @@ app.post('/addCalories', isAuthenticated,isAdmin, (req, res) => {
 });
 
 
-// View Calories
-app.get('/calories', isAuthenticated,(req, res) => {
+// ====================
+// VIEW CALORIES
+// ====================
 
-    const sql = 'SELECT * FROM calories';
+app.get('/calories', isAuthenticated, (req, res) => {
 
-    db.query(sql, (err, results) => {
+    const search = req.query.search || '';
 
-        if (err) throw err;
+    const sql = `
+        SELECT *
+        FROM calories
+        WHERE foodName LIKE ?
+           OR mealType LIKE ?
+    `;
 
-        let totalCalories = 0;
+    db.query(
+        sql,
+        [
+            `%${search}%`,
+            `%${search}%`
+        ],
+        (err, results) => {
 
-        results.forEach(item => {
-            totalCalories += Number(item.calories);
-        });
+            if (err) throw err;
 
-        res.render('calories', {
-            calories: results,
-            totalCalories: totalCalories
-        });
+            let totalCalories = 0;
 
-    });
+            results.forEach(item => {
+                totalCalories += Number(item.calories);
+            });
+
+            res.render('calories', {
+                calories: results,
+                totalCalories: totalCalories,
+                search: search
+            });
+
+        }
+    );
 
 });
 
