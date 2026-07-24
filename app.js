@@ -76,18 +76,23 @@ app.get('/workouts', (req, res) => {
         SELECT *
         FROM workouts
         WHERE workoutName LIKE ?
+           OR workoutType LIKE ?
     `;
 
-    db.query(sql, [`%${search}%`], (err, results) => {
+    db.query(
+        sql,
+        [`%${search}%`, `%${search}%`],
+        (err, results) => {
 
-        if (err) throw err;
+            if (err) throw err;
 
-        res.render('workouts', {
-            workouts: results,
-            search: search
-        });
+            res.render('workouts', {
+                workouts: results,
+                search: search
+            });
 
-    });
+        }
+    );
 
 });
 
