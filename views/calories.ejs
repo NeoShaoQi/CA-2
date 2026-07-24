@@ -12,6 +12,32 @@
     <div class="card shadow p-4">
 
         <h1>Calorie Tracker</h1>
+            <form action="/calories" method="GET" class="row g-3 mb-4">
+
+    <div class="col-md-6">
+        <input
+            type="text"
+            name="search"
+            class="form-control"
+            placeholder="Search food..."
+            value="<%= search || '' %>">
+    </div>
+
+    <div class="col-md-2">
+        <button
+            type="submit"
+            class="btn btn-primary w-100">
+            🔍 Search
+        </button>
+    </div>
+
+    <div class="col-md-2">
+        <a href="/calories" class="btn btn-secondary w-100">
+            Clear
+        </a>
+    </div>
+
+</form>
 
         <div class="alert alert-info">
             Total Calories:
