@@ -72,10 +72,21 @@ app.get('/addWorkout', isAuthenticated, (req, res) => {
     res.render('addWorkout');
 });
 
+
 // Create Workout
+// ==========================================================
+// (ALTON) - CREATE WORKOUT
+// Added calories field into workout creation.
+// ==========================================================
+
 app.post('/addWorkout', isAuthenticated, (req, res) => {
 
-    const { workoutName, workoutType, duration } = req.body;
+    const {
+        workoutName,
+        workoutType,
+        duration,
+        calories
+    } = req.body;
 
     const sql = `
         INSERT INTO workouts
@@ -85,15 +96,23 @@ app.post('/addWorkout', isAuthenticated, (req, res) => {
 
     db.query(
         sql,
-        [ workoutName,workoutType,duration,calories],
-        (err, result) => {
+        [
+            workoutName,
+            workoutType,
+            duration,
+            calories
+        ],
+        (err) => {
 
             if (err) throw err;
 
             res.redirect('/workouts');
+
         }
     );
+
 });
+
 
 // View Workouts
 app.get('/workouts', (req, res) => {
@@ -102,15 +121,101 @@ app.get('/workouts', (req, res) => {
 
     db.query(sql, (err, results) => {
 
-            if (err) throw err;
+        if (err) throw err;
 
         res.render('workouts', {
             workouts: results
         });
+
     });
+
 });
 
 
+// ==========================================================
+// (ALTON) - EDIT WORKOUT
+// Displays selected workout for editing.
+// ==========================================================
+
+app.get('/editWorkout/:id', isAuthenticated, (req, res) => {
+
+    db.query(
+        'SELECT * FROM workouts WHERE id=?',
+        [req.params.id],
+        (err, results) => {
+
+            if (err) throw err;
+
+            res.render('editWorkout', {
+                workout: results[0]
+            });
+
+        });
+
+});
+
+
+// ==========================================================
+// (ALTON) - UPDATE WORKOUT
+// Updates workout information.
+// ==========================================================
+
+app.post('/editWorkout/:id', isAuthenticated, (req, res) => {
+
+    const {
+        workoutName,
+        workoutType,
+        duration,
+        calories
+    } = req.body;
+
+    db.query(
+        `
+        UPDATE workouts
+        SET
+            workoutName=?,
+            workoutType=?,
+            duration=?,
+            calories=?
+        WHERE id=?
+        `,
+        [
+            workoutName,
+            workoutType,
+            duration,
+            calories,
+            req.params.id
+        ],
+        (err) => {
+
+            if (err) throw err;
+
+            res.redirect('/workouts');
+
+        });
+
+});
+
+
+// ==========================================================
+// (ALTON) - DELETE WORKOUT
+// Deletes selected workout.
+// ==========================================================
+
+app.get('/deleteWorkout/:id', isAuthenticated, (req, res) => {
+
+    db.query(
+        'DELETE FROM workouts WHERE id=?',
+        [req.params.id],
+        (err) => {
+
+            if (err) throw err;
+
+            res.redirect('/workouts');
+
+        });
+
+});
 // ====================
 // CALORIE ROUTES
 // ====================
@@ -119,6 +224,7 @@ app.get('/workouts', (req, res) => {
 app.get('/addCalories', isAuthenticated, (req, res) => {
     res.render('addCalories');
 });
+
 
 // Create Calorie Entry
 app.post('/addCalories', isAuthenticated, (req, res) => {
@@ -137,15 +243,22 @@ app.post('/addCalories', isAuthenticated, (req, res) => {
 
     db.query(
         sql,
-        [foodName, calories, mealType],
-        (err, result) => {
+        [
+            foodName,
+            calories,
+            mealType
+        ],
+        (err) => {
 
             if (err) throw err;
 
             res.redirect('/calories');
+
         }
     );
+
 });
+
 
 // View Calories
 app.get('/calories', isAuthenticated, (req, res) => {
@@ -166,10 +279,98 @@ app.get('/calories', isAuthenticated, (req, res) => {
             calories: results,
             totalCalories: totalCalories
         });
+
     });
+
 });
 
 
+// ==========================================================
+// (ALTON) - EDIT CALORIE ENTRY
+// Displays the selected calorie entry for editing.
+// ==========================================================
+
+app.get('/editCalories/:id', isAuthenticated, (req, res) => {
+
+    db.query(
+        'SELECT * FROM calories WHERE id=?',
+        [req.params.id],
+        (err, results) => {
+
+            if (err) throw err;
+
+            res.render('editCalories', {
+                calorie: results[0]
+            });
+
+        }
+    );
+
+});
+
+
+// ==========================================================
+// (ALTON) - UPDATE CALORIE ENTRY
+// Updates an existing calorie record.
+// ==========================================================
+
+app.post('/editCalories/:id', isAuthenticated, (req, res) => {
+
+    const {
+        foodName,
+        calories,
+        mealType
+    } = req.body;
+
+    const sql = `
+        UPDATE calories
+        SET
+            foodName=?,
+            calories=?,
+            mealType=?
+        WHERE id=?
+    `;
+
+    db.query(
+        sql,
+        [
+            foodName,
+            calories,
+            mealType,
+            req.params.id
+        ],
+        (err) => {
+
+            if (err) throw err;
+
+            res.redirect('/calories');
+
+        }
+    );
+
+});
+
+
+// ==========================================================
+// (ALTON) - DELETE CALORIE ENTRY
+// Deletes the selected calorie record.
+// ==========================================================
+
+app.get('/deleteCalories/:id', isAuthenticated, (req, res) => {
+
+    db.query(
+        'DELETE FROM calories WHERE id=?',
+        [req.params.id],
+        (err) => {
+
+            if (err) throw err;
+
+            res.redirect('/calories');
+
+        }
+    );
+
+});
 // ====================
 // BMI ROUTES
 // ====================
@@ -215,6 +416,7 @@ app.post('/bmi', isAuthenticated, (req, res) => {
 
 });
 
+
 // ====================
 // ADMIN ROUTES
 // ====================
@@ -247,11 +449,13 @@ app.get('/users',
         });
 
 });
-
 // ====================
 // SERVER
 // ====================
 
 app.listen(3000, () => {
-    console.log('Server running on http://localhost:3000');
+    console.log('========================================');
+    console.log('Gym Tracker Server Started Successfully');
+    console.log('Running at: http://localhost:3000');
+    console.log('========================================');
 });
