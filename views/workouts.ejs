@@ -73,13 +73,9 @@
                     <tr>
 
                         <td><%= workout.id %></td>
-
                         <td><%= workout.workoutName %></td>
-
                         <td><%= workout.workoutType %></td>
-
                         <td><%= workout.duration %> mins</td>
-
                         <td><%= workout.calories %> kcal</td>
 
                         <% if (currentUser && currentUser.role === 'admin') { %>
@@ -109,26 +105,19 @@
 
         </table>
 
-        <!-- Bottom Button -->
+        <!-- Admin Only Button -->
+        <% if (currentUser && currentUser.role === 'admin') { %>
+
         <div class="mt-3">
 
-            <% if (currentUser && currentUser.role === 'admin') { %>
-
-                <a href="/admin/addWorkout"
-                   class="btn btn-success">
-                    ➕ Add Preset Workout
-                </a>
-
-            <% } else { %>
-
-                <a href="/addWorkout"
-                   class="btn btn-success">
-                    ➕ Add Custom Workout
-                </a>
-
-            <% } %>
+            <a href="/addWorkout"
+               class="btn btn-success">
+                ➕ Add Workout
+            </a>
 
         </div>
+
+        <% } %>
 
     </div>
 
