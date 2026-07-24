@@ -449,6 +449,51 @@ app.get('/users',
         });
 
 });
+
+// ====================
+// ADMIN WORKOUTS
+// ====================
+
+app.get('/admin/workouts',
+    isAuthenticated,
+    isAdmin,
+    (req, res) => {
+
+        db.query(
+            'SELECT * FROM workouts',
+            (err, results) => {
+
+                if (err) throw err;
+
+                res.render('adminWorkouts', {
+                    workouts: results
+                });
+
+            });
+
+});
+// ====================
+// ADMIN FOODS
+// ====================
+
+app.get('/admin/calories',
+    isAuthenticated,
+    isAdmin,
+    (req, res) => {
+
+        db.query(
+            'SELECT * FROM calories',
+            (err, results) => {
+
+                if (err) throw err;
+
+                res.render('adminCalories', {
+                    calories: results
+                });
+
+            });
+
+});
 // ====================
 // SERVER
 // ====================
