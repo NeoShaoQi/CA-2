@@ -221,13 +221,13 @@ app.get('/deleteWorkout/:id', isAuthenticated, isAdmin, (req, res) => {
 // ====================
 
 // Display Add Calories Form
-app.get('/addCalories', isAuthenticated, isAdmin, (req, res) => {
+app.get('/addCalories', isAuthenticated, (req, res) => {
     res.render('addCalories');
 });
 
 
 // Create Calorie Entry
-app.post('/addCalories', isAuthenticated,isAdmin, (req, res) => {
+app.post('/addCalories', isAuthenticated, (req, res) => {
 
     const {
         foodName,
@@ -261,7 +261,7 @@ app.post('/addCalories', isAuthenticated,isAdmin, (req, res) => {
 
 
 // View Calories
-app.get('/calories', isAuthenticated,isAdmin, (req, res) => {
+app.get('/calories', isAuthenticated,(req, res) => {
 
     const sql = 'SELECT * FROM calories';
 
