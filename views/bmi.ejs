@@ -21,7 +21,7 @@
     <div class="container">
 
         <a class="navbar-brand" href="/">
-            Gym Tracker
+            🏋️ Gym Tracker
         </a>
 
         <div class="navbar-nav ms-auto">
@@ -58,75 +58,155 @@
 
 <div class="container mt-5">
 
-    <div class="card shadow p-4">
+    <div class="card shadow-lg">
 
-        <h1 class="text-primary mb-4">
-            ⚖️ BMI Calculator
-        </h1>
+        <div class="card-body">
 
-        <form action="/bmi" method="POST">
+            <h1 class="text-primary text-center mb-4">
+                ⚖️ BMI Calculator
+            </h1>
 
-            <div class="mb-3">
+            <form action="/bmi" method="POST">
 
-                <label class="form-label">
-                    Weight (kg)
-                </label>
+                <div class="mb-3">
 
-                <input
-                    type="number"
-                    name="weight"
-                    class="form-control"
-                    step="0.1"
-                    required>
+                    <label class="form-label">
+                        Weight (kg)
+                    </label>
+
+                    <input
+                        type="number"
+                        name="weight"
+                        class="form-control"
+                        step="0.1"
+                        placeholder="Enter your weight"
+                        required>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Height (cm)
+                    </label>
+
+                    <input
+                        type="number"
+                        name="height"
+                        class="form-control"
+                        step="0.1"
+                        placeholder="Enter your height"
+                        required>
+
+                </div>
+
+                <div class="mt-4">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary">
+
+                        Calculate BMI
+
+                    </button>
+
+                    <a href="/"
+                       class="btn btn-secondary">
+
+                        ⬅ Back Home
+
+                    </a>
+
+                </div>
+
+            </form>
+
+            <% if (bmi) { %>
+
+            <div class="card mt-5 border-success">
+
+                <div class="card-body text-center">
+
+                    <h3 class="text-success">
+                        Your BMI Result
+                    </h3>
+
+                    <hr>
+
+                    <h1 class="display-4">
+                        <%= bmi %>
+                    </h1>
+
+                    <h4 class="mt-3">
+
+                        <% if(category === "Underweight"){ %>
+
+                            <span class="badge bg-warning text-dark">
+                                <%= category %>
+                            </span>
+
+                        <% } else if(category === "Normal Weight"){ %>
+
+                            <span class="badge bg-success">
+                                <%= category %>
+                            </span>
+
+                        <% } else if(category === "Overweight"){ %>
+
+                            <span class="badge bg-warning">
+                                <%= category %>
+                            </span>
+
+                        <% } else { %>
+
+                            <span class="badge bg-danger">
+                                <%= category %>
+                            </span>
+
+                        <% } %>
+
+                    </h4>
+
+                </div>
 
             </div>
 
-            <div class="mb-3">
+            <% } %>
 
-                <label class="form-label">
-                    Height (cm)
-                </label>
+            <div class="alert alert-secondary mt-4">
 
-                <input
-                    type="number"
-                    name="height"
-                    class="form-control"
-                    step="0.1"
-                    required>
-
-            </div>
-
-            <button
-                type="submit"
-                class="btn btn-primary">
-                Calculate BMI
-            </button>
-
-            <a href="/" class="btn btn-secondary">
-                Home
-            </a>
-
-        </form>
-
-        <% if (bmi) { %>
-
-            <div class="alert alert-info mt-4">
-
-                <h4>
-                    Your BMI: <%= bmi %>
-                </h4>
-
-                <h5>
-                    Category: <%= category %>
+                <h5 class="mb-3">
+                    BMI Categories
                 </h5>
 
+                <ul class="mb-0">
+
+                    <li>
+                        <strong>Below 18.5</strong> — Underweight
+                    </li>
+
+                    <li>
+                        <strong>18.5 - 24.9</strong> — Normal Weight
+                    </li>
+
+                    <li>
+                        <strong>25.0 - 29.9</strong> — Overweight
+                    </li>
+
+                    <li>
+                        <strong>30.0 and above</strong> — Obese
+                    </li>
+
+                </ul>
+
             </div>
 
-        <% } %>
+        </div>
 
     </div>
 
 </div>
 
 </body>
+
 </html>
