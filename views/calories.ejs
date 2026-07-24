@@ -23,7 +23,7 @@
                     type="text"
                     name="search"
                     class="form-control"
-                    placeholder="Search food..."
+                    placeholder="Search food by name or meal type..."
                     value="<%= search || '' %>">
             </div>
 
@@ -108,26 +108,19 @@
 
         </table>
 
-        <!-- Bottom Button -->
+        <!-- Admin Only Button -->
+        <% if (currentUser && currentUser.role === 'admin') { %>
+
         <div class="mt-3">
 
-            <% if (currentUser && currentUser.role === 'admin') { %>
-
-                <a href="/addCalories"
-                   class="btn btn-success">
-                    ➕ Add Preset Food
-                </a>
-
-            <% } else { %>
-
-                <a href="/addCalories"
-                   class="btn btn-success">
-                    ➕ Add Custom Food
-                </a>
-
-            <% } %>
+            <a href="/addCalories"
+               class="btn btn-success">
+                ➕ Add Food
+            </a>
 
         </div>
+
+        <% } %>
 
     </div>
 
