@@ -65,17 +65,16 @@ app.post('/addWorkout', (req, res) => {
 // View Workouts
 app.get('/workouts', (req, res) => {
 
-    db.query(
-        'SELECT * FROM workouts',
-        (err, results) => {
+    const sql = 'SELECT * FROM workouts';
+
+    db.query(sql, (err, results) => {
 
             if (err) throw err;
 
-            res.render('workouts', {
-                workouts: results
-            });
-        }
-    );
+        res.render('workouts', {
+            workouts: results
+        });
+    });
 });
 
 
