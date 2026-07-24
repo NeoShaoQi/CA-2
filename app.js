@@ -68,15 +68,15 @@ app.post('/addWorkout', (req, res) => {
 });
 
 // View Workouts
-app.get('/workouts', (req, res) => {
+app.get('/calories', (req, res) => {
 
     const search = req.query.search || '';
 
     const sql = `
         SELECT *
-        FROM workouts
-        WHERE workoutName LIKE ?
-           OR workoutType LIKE ?
+        FROM calories
+        WHERE foodName LIKE ?
+           OR mealType LIKE ?
     `;
 
     db.query(
@@ -86,8 +86,15 @@ app.get('/workouts', (req, res) => {
 
             if (err) throw err;
 
-            res.render('workouts', {
-                workouts: results,
+            let totalCalories = 0;
+
+            results.forEach(item => {
+                totalCalories += Number(item.calories);
+            });
+
+            res.render('calories', {
+                calories: results,
+                totalCalories: totalCalories,
                 search: search
             });
 
