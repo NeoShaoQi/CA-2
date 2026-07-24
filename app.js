@@ -3,43 +3,38 @@ const mysql = require('mysql2');
 
 const app = express();
 
-// Middleware
 app.use(express.urlencoded({ extended: false }));
 
-// EJS
 app.set('view engine', 'ejs');
 
 // Database Connection
 const db = mysql.createConnection({
-    host: 'c237-eaint-mysql.mysql.database.azure.com',
-    user: 'c237_029',
-    password: 'c237029@2026!',
-    database: 'c237_029_teamuniqueandshort',
+    host: 'localhost',
+    user: 'root',
+    password: 'YOUR_PASSWORD',
+    database: 'gymdb'
 });
 
 db.connect((err) => {
-    if (err) {
-        throw err;
-    }
-
+    if (err) throw err;
     console.log('Connected to MySQL');
 });
 
 
-// ====================
-// HOME
-// ====================
+// =====================
+// HOME PAGE
+// =====================
 
 app.get('/', (req, res) => {
     res.render('index');
 });
 
 
-// ====================
+// =====================
 // WORKOUT ROUTES
-// ====================
+// =====================
 
-// Display Add Workout Form
+// Show Add Workout Form
 app.get('/addWorkout', (req, res) => {
     res.render('addWorkout');
 });
@@ -47,11 +42,7 @@ app.get('/addWorkout', (req, res) => {
 // Create Workout
 app.post('/addWorkout', (req, res) => {
 
-    const {
-        workoutName,
-        workoutType,
-        duration
-    } = req.body;
+    const { workoutName, workoutType, duration } = req.body;
 
     const sql = `
         INSERT INTO workouts
@@ -71,39 +62,36 @@ app.post('/addWorkout', (req, res) => {
     );
 });
 
-// View All Workouts
+// View Workouts
 app.get('/workouts', (req, res) => {
 
-    const sql = 'SELECT * FROM workouts';
+    db.query(
+        'SELECT * FROM workouts',
+        (err, results) => {
 
-    db.query(sql, (err, results) => {
+            if (err) throw err;
 
-        if (err) throw err;
-
-        res.render('workouts', {
-            workouts: results
-        });
-    });
+            res.render('workouts', {
+                workouts: results
+            });
+        }
+    );
 });
 
 
-// ====================
+// =====================
 // CALORIE ROUTES
-// ====================
+// =====================
 
-// Display Add Calories Form
+// Show Add Calories Form
 app.get('/addCalories', (req, res) => {
     res.render('addCalories');
 });
 
-// Create Calorie Entry
+// Add Calories
 app.post('/addCalories', (req, res) => {
 
-    const {
-        foodName,
-        calories,
-        mealType
-    } = req.body;
+    const { foodName, calories, mealType } = req.body;
 
     const sql = `
         INSERT INTO calories
@@ -126,29 +114,76 @@ app.post('/addCalories', (req, res) => {
 // View Calories
 app.get('/calories', (req, res) => {
 
-    const sql = 'SELECT * FROM calories';
+    db.query(
+        'SELECT * FROM calories',
+        (err, results) => {
 
-    db.query(sql, (err, results) => {
+            if (err) throw err;
 
-        if (err) throw err;
+            let totalCalories = 0;
 
-        let totalCalories = 0;
+            results.forEach(item => {
+                totalCalories += Number(item.calories);
+            });
 
-        results.forEach(item => {
-            totalCalories += item.calories;
-        });
-
-        res.render('calories', {
-            calories: results,
-            totalCalories: totalCalories
-        });
-    });
+            res.render('calories', {
+                calories: results,
+                totalCalories: totalCalories
+            });
+        }
+    );
 });
 
 
-// ====================
+// =====================
+// BMI ROUTES
+// =====================
+
+// Display BMI Form
+app.get('/bmi', (req, res) => {
+
+    res.render('bmi', {
+        bmi: null,
+        category: null
+    });
+
+});
+
+// Calculate BMI
+app.post('/bmi', (req, res) => {
+
+    const { weight, height } = req.body;
+
+    const bmi = (
+        weight / ((height / 100) * (height / 100))
+    ).toFixed(2);
+
+    let category = '';
+
+    if (bmi < 18.5) {
+        category = 'Underweight';
+    }
+    else if (bmi < 25) {
+        category = 'Normal Weight';
+    }
+    else if (bmi < 30) {
+        category = 'Overweight';
+    }
+    else {
+        category = 'Obese';
+    }
+
+    res.render('bmi', {
+        bmi: bmi,
+        category: category
+    });
+
+});
+
+
+// =====================
 // SERVER
-// ====================
+// =====================
 
 app.listen(3000, () => {
     console.log('Server running on http://localhost:3000');
