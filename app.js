@@ -483,7 +483,6 @@ app.get('/bmi', isAuthenticated, (req, res) => {
 
 });
 
-// Calculate BMI
 app.post('/bmi', isAuthenticated, (req, res) => {
 
     const { weight, height } = req.body;
