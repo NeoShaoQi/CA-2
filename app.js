@@ -71,7 +71,7 @@ app.get('/', (req, res) => {
 // ====================
 
 // Display Add Workout Form
-app.get('/addWorkout', isAuthenticated,isAdmn, (req, res) => {
+app.get('/addWorkout', isAuthenticated,isAdmin, (req, res) => {
     res.render('addWorkout');
 });
 
