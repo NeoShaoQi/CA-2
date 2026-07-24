@@ -78,11 +78,15 @@
             <div class="alert alert-info d-flex justify-content-between">
 
                 <span>
+
                     <strong>Total Calories Displayed</strong>
+
                 </span>
 
                 <span>
+
                     🔥 <strong><%= totalCalories %></strong> kcal
+
                 </span>
 
             </div>
@@ -99,8 +103,18 @@
                         <th>Calories</th>
                         <th>Meal Type</th>
 
-                        <% if (currentUser && currentUser.role === 'admin') { %>
-                            <th width="180">Actions</th>
+                        <% if (currentUser.role === 'admin') { %>
+
+                            <th width="220">
+                                Actions
+                            </th>
+
+                        <% } else { %>
+
+                            <th width="170">
+                                Details
+                            </th>
+
                         <% } %>
 
                     </tr>
@@ -109,81 +123,94 @@
 
                 <tbody>
 
-                    <% if (calories.length > 0) { %>
+                <% if (calories.length > 0) { %>
 
-                        <% calories.forEach(item => { %>
+                    <% calories.forEach(item => { %>
 
-                        <tr>
+                    <tr>
 
-                            <td>
+                        <td>
 
-                                <strong>
-                                    <%= item.foodName %>
-                                </strong>
+                            <strong>
+                                <%= item.foodName %>
+                            </strong>
 
-                            </td>
+                        </td>
 
-                            <td>
+                        <td>
 
-                                🔥 <%= item.calories %> kcal
+                            🔥 <%= item.calories %> kcal
 
-                            </td>
+                        </td>
 
-                            <td>
+                        <td>
 
-                                <span class="badge bg-success">
-                                    <%= item.mealType %>
-                                </span>
+                            <span class="badge bg-success">
+                                <%= item.mealType %>
+                            </span>
 
-                            </td>
+                        </td>
 
-                            <% if (currentUser && currentUser.role === 'admin') { %>
+                        <% if (currentUser.role === 'admin') { %>
 
-                            <td>
+                        <td>
 
-                                <a href="/editCalories/<%= item.id %>"
-                                   class="btn btn-warning btn-sm">
+                            <a href="/editCalories/<%= item.id %>"
+                               class="btn btn-warning btn-sm">
 
-                                    Edit
+                                ✏ Edit
 
-                                </a>
+                            </a>
 
-                                <a href="/deleteCalories/<%= item.id %>"
-                                   class="btn btn-danger btn-sm"
-                                   onclick="return confirm('Delete this food?')">
+                            <a href="/deleteCalories/<%= item.id %>"
+                               class="btn btn-danger btn-sm"
+                               onclick="return confirm('Delete this food?')">
 
-                                    Delete
+                                🗑 Delete
 
-                                </a>
+                            </a>
 
-                            </td>
+                        </td>
 
-                            <% } %>
+                        <% } else { %>
 
-                        </tr>
+                        <td>
 
-                        <% }) %>
+                            <a href="/food/<%= item.id %>"
+                               class="btn btn-success btn-sm">
 
-                    <% } else { %>
+                                🍽 Eat This
 
-                        <tr>
+                            </a>
 
-                            <td colspan="<%= currentUser && currentUser.role === 'admin' ? 4 : 3 %>"
-                                class="text-center">
+                        </td>
 
-                                No food records found.
+                        <% } %>
 
-                            </td>
+                    </tr>
 
-                        </tr>
+                    <% }) %>
 
-                    <% } %>
+                <% } else { %>
+
+                    <tr>
+
+                        <td colspan="4"
+                            class="text-center">
+
+                            No food records found.
+
+                        </td>
+
+                    </tr>
+
+                <% } %>
 
                 </tbody>
 
             </table>
 
-            <% if (currentUser && currentUser.role === 'admin') { %>
+            <% if (currentUser.role === 'admin') { %>
 
             <div class="mt-4">
 
