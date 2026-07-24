@@ -20,6 +20,9 @@ const db = mysql.createConnection({
     password: 'c237029@2026!',
     database: 'c237_029_teamuniqueandshort',
 });
+ssl: {
+    rejectUnauthorized: false
+}
 
 db.connect((err) => {
     if (err) {
@@ -79,7 +82,7 @@ app.get('/addWorkout', isAuthenticated, (req, res) => {
 // Added calories field into workout creation.
 // ==========================================================
 
-app.post('/addWorkout', isAuthenticated, (req, res) => {
+app.post('/addWorkout', isAuthenticated,isAdmin, (req, res) => {
 
     const {
         workoutName,
@@ -114,20 +117,38 @@ app.post('/addWorkout', isAuthenticated, (req, res) => {
 });
 
 
-// View Workouts
-app.get('/workouts', (req, res) => {
+// ====================
+// VIEW WORKOUTS
+// ====================
 
-    const sql = 'SELECT * FROM workouts';
+app.get('/workouts', isAuthenticated, (req, res) => {
 
-    db.query(sql, (err, results) => {
+    const search = req.query.search || '';
 
-        if (err) throw err;
+    const sql = `
+        SELECT *
+        FROM workouts
+        WHERE workoutName LIKE ?
+           OR workoutType LIKE ?
+    `;
 
-        res.render('workouts', {
-            workouts: results
-        });
+    db.query(
+        sql,
+        [
+            `%${search}%`,
+            `%${search}%`
+        ],
+        (err, results) => {
 
-    });
+            if (err) throw err;
+
+            res.render('workouts', {
+                workouts: results,
+                search: search
+            });
+
+        }
+    );
 
 });
 
@@ -221,13 +242,13 @@ app.get('/deleteWorkout/:id', isAuthenticated, isAdmin, (req, res) => {
 // ====================
 
 // Display Add Calories Form
-app.get('/addCalories', isAuthenticated, (req, res) => {
+app.get('/addCalories', isAuthenticated,isAdmin, (req, res) => {
     res.render('addCalories');
 });
 
 
 // Create Calorie Entry
-app.post('/addCalories', isAuthenticated, (req, res) => {
+app.post('/addCalories', isAuthenticated,isAdmin, (req, res) => {
 
     const {
         foodName,
@@ -260,27 +281,45 @@ app.post('/addCalories', isAuthenticated, (req, res) => {
 });
 
 
-// View Calories
-app.get('/calories', isAuthenticated,(req, res) => {
+// ====================
+// VIEW CALORIES
+// ====================
 
-    const sql = 'SELECT * FROM calories';
+app.get('/calories', isAuthenticated, (req, res) => {
 
-    db.query(sql, (err, results) => {
+    const search = req.query.search || '';
 
-        if (err) throw err;
+    const sql = `
+        SELECT *
+        FROM calories
+        WHERE foodName LIKE ?
+           OR mealType LIKE ?
+    `;
 
-        let totalCalories = 0;
+    db.query(
+        sql,
+        [
+            `%${search}%`,
+            `%${search}%`
+        ],
+        (err, results) => {
 
-        results.forEach(item => {
-            totalCalories += Number(item.calories);
-        });
+            if (err) throw err;
 
-        res.render('calories', {
-            calories: results,
-            totalCalories: totalCalories
-        });
+            let totalCalories = 0;
 
-    });
+            results.forEach(item => {
+                totalCalories += Number(item.calories);
+            });
+
+            res.render('calories', {
+                calories: results,
+                totalCalories: totalCalories,
+                search: search
+            });
+
+        }
+    );
 
 });
 
@@ -447,56 +486,6 @@ app.get('/users',
             });
 
         });
-
-});
-// ====================
-// ADMIN ADD WORKOUT
-// ====================
-
-// Show Add Workout Form
-app.get('/admin/addWorkout',
-    isAuthenticated,
-    isAdmin,
-    (req, res) => {
-
-        res.render('addWorkout');
-
-});
-
-// Save Preset Workout
-app.post('/admin/addWorkout',
-    isAuthenticated,
-    isAdmin,
-    (req, res) => {
-
-        const {
-            workoutName,
-            workoutType,
-            duration,
-            calories
-        } = req.body;
-
-        const sql = `
-            INSERT INTO workouts
-            (workoutName, workoutType, duration, calories)
-            VALUES (?, ?, ?, ?)
-        `;
-
-        db.query(
-            sql,
-            [
-                workoutName,
-                workoutType,
-                duration,
-                calories
-            ],
-            (err) => {
-
-                if (err) throw err;
-
-                res.redirect('/workouts');
-
-            });
 
 });
 

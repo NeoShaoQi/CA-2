@@ -20,18 +20,13 @@
     <div class="card shadow p-4">
 
         <h2 class="text-primary mb-4">
-
-            <% if (currentUser.role === 'admin') { %>
-                Add Preset Workout
-            <% } else { %>
-                Add Custom Workout
-            <% } %>
-
+            Add Workout
         </h2>
 
-        <form action="<%= currentUser.role === 'admin' ? '/admin/addWorkout' : '/addWorkout' %>" method="POST">
+        <form action="/addWorkout" method="POST">
 
             <div class="mb-3">
+
                 <label class="form-label">
                     Workout Name
                 </label>
@@ -41,9 +36,11 @@
                     name="workoutName"
                     class="form-control"
                     required>
+
             </div>
 
             <div class="mb-3">
+
                 <label class="form-label">
                     Workout Type
                 </label>
@@ -93,16 +90,11 @@
             <button
                 type="submit"
                 class="btn btn-success">
-
-                <% if (currentUser.role === 'admin') { %>
-                    Save Preset Workout
-                <% } else { %>
-                    Save Custom Workout
-                <% } %>
-
+                Save Workout
             </button>
 
-            <a href="/workouts" class="btn btn-secondary">
+            <a href="/workouts"
+               class="btn btn-secondary">
                 Cancel
             </a>
 
