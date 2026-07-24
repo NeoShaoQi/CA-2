@@ -15,52 +15,151 @@
 
 <body class="bg-light">
 
-<div class="container mt-5">
+<div class="container py-5">
 
-    <div class="card shadow p-4">
+    <div class="text-center mb-5">
 
-        <h1 class="text-danger">
-            🛠 Admin Dashboard
+        <h1 class="display-5 fw-bold text-danger">
+            🛠 Administrator Dashboard
         </h1>
 
         <p class="lead">
-            Welcome,
+            Welcome back,
             <strong><%= currentUser.username %></strong>
         </p>
 
-        <hr>
+        <span class="badge bg-danger fs-6">
+            ADMINISTRATOR
+        </span>
 
-        <div class="d-grid gap-3">
+    </div>
 
-            <a href="/users" class="btn btn-primary">
-                👥 View Registered Users
-            </a>
+    <div class="row g-4">
 
-            <a href="/workouts" class="btn btn-success">
-                🏋 Manage Workouts
-            </a>
+        <!-- Users -->
+        <div class="col-md-6">
 
-            <a href="/calories" class="btn btn-warning">
-                🍎 Manage Foods
-            </a>
+            <div class="card shadow h-100 border-primary">
 
-            <a href="/bmi" class="btn btn-info">
-                ⚖️ BMI Calculator
-            </a>
+                <div class="card-body text-center">
 
-            <a href="/" class="btn btn-secondary">
-                🏠 Back to Home
-            </a>
+                    <h2>👥</h2>
 
-            <a href="/logout" class="btn btn-danger">
-                🚪 Log Out
-            </a>
+                    <h4>Users</h4>
+
+                    <p>
+                        View all registered users and their roles.
+                    </p>
+
+                    <a href="/users"
+                       class="btn btn-primary">
+                        View Users
+                    </a>
+
+                </div>
+
+            </div>
 
         </div>
+
+        <!-- Workouts -->
+        <div class="col-md-6">
+
+            <div class="card shadow h-100 border-success">
+
+                <div class="card-body text-center">
+
+                    <h2>🏋️</h2>
+
+                    <h4>Workout Management</h4>
+
+                    <p>
+                        Add, edit and delete workouts.
+                    </p>
+
+                    <a href="/workouts"
+                       class="btn btn-success">
+                        Manage Workouts
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Foods -->
+        <div class="col-md-6">
+
+            <div class="card shadow h-100 border-warning">
+
+                <div class="card-body text-center">
+
+                    <h2>🍎</h2>
+
+                    <h4>Food Management</h4>
+
+                    <p>
+                        Add, edit and delete food items.
+                    </p>
+
+                    <a href="/calories"
+                       class="btn btn-warning">
+                        Manage Foods
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- BMI -->
+        <div class="col-md-6">
+
+            <div class="card shadow h-100 border-info">
+
+                <div class="card-body text-center">
+
+                    <h2>⚖️</h2>
+
+                    <h4>BMI Calculator</h4>
+
+                    <p>
+                        Access the BMI calculator.
+                    </p>
+
+                    <a href="/bmi"
+                       class="btn btn-info">
+                        Open BMI Calculator
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <hr class="my-5">
+
+    <div class="text-center">
+
+        <a href="/"
+           class="btn btn-secondary btn-lg me-3">
+            🏠 Home
+        </a>
+
+        <a href="/logout"
+           class="btn btn-danger btn-lg">
+            🚪 Logout
+        </a>
 
     </div>
 
 </div>
 
 </body>
+
 </html>
