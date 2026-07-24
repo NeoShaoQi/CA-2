@@ -7,36 +7,57 @@
 
     <div class="row g-3">
 
-        <!-- Workout -->
+        <!-- View Workouts -->
         <div class="col-md-6">
-            <a href="/workouts" class="btn btn-primary w-orkout -->
-        <div class="col-md-6">
-            /addWorkoutbtn btn-success w-100 p-3">
-                ➕ Add Workout
+            <a href="/workouts" class="btn btn-primary w-100 p-3">
+                🏋️ View Workouts
             </a>
         </div>
 
-        <!-- Calories -->
+        <!-- Add Workout (Admin Only) -->
+        <% if (currentUser.role === 'admin') { %>
         <div class="col-md-6">
-            " class="btn btn-warning w-100 p-3">
+            <a href="/addWorkout" class="btn btn-success w-100 p-3">
+                ➕ Add Workout
+            </a>
+        </div>
+        <% } %>
+
+        <!-- View Calories -->
+        <div class="col-md-6">
+            <a href="/calories" class="btn btn-warning w-100 p-3">
                 🍎 View Calories
             </a>
         </div>
 
-        <!-- Add Calories -->
+        <!-- Add Food (Admin Only) -->
+        <% if (currentUser.role === 'admin') { %>
         <div class="col-md-6">
-            <a href="/addCalories" class="btn btn-infoBMI -->
-        <div class="col-md-12">
-            <a href="/bmi" class="btn btn-secondary w-ntUser.role === 'admin') { %>
-            <div class="col-md-12">
-                /admin w-100 p-3">
-                    🛠️ Admin Dashboard
-                </a>
-            </div>
+            <a href="/addCalories" class="btn btn-info w-100 p-3">
+                ➕ Add Food
+            </a>
+        </div>
         <% } %>
 
+        <!-- BMI -->
         <div class="col-md-12">
-            /logout-danger w-100 p-3">
+            <a href="/bmi" class="btn btn-secondary w-100 p-3">
+                ⚖️ BMI Calculator
+            </a>
+        </div>
+
+        <!-- Admin Dashboard -->
+        <% if (currentUser.role === 'admin') { %>
+        <div class="col-md-12">
+            <a href="/admin" class="btn btn-dark w-100 p-3">
+                🛠️ Admin Dashboard
+            </a>
+        </div>
+        <% } %>
+
+        <!-- Logout -->
+        <div class="col-md-12">
+            <a href="/logout" class="btn btn-danger w-100 p-3">
                 Log Out
             </a>
         </div>
@@ -53,11 +74,11 @@
 
     <div class="d-grid gap-3 mt-3 col-md-6 mx-auto">
 
-        " class="btn btn-primary">
+        <a href="/login" class="btn btn-primary">
             Log In
         </a>
 
-        /register
+        <a href="/register" class="btn btn-success">
             Register New Account
         </a>
 
