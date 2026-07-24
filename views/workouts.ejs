@@ -23,7 +23,7 @@
             type="text"
             name="search"
             class="form-control"
-            placeholder="Search workout..."
+            placeholder="Search workout by name or type..."
             value="<%= search || '' %>">
     </div>
 
@@ -31,8 +31,14 @@
         <button
             type="submit"
             class="btn btn-primary w-100">
-            Search
+            🔍 Search
         </button>
+    </div>
+
+    <div class="col-md-2">
+        <a href="/workouts" class="btn btn-secondary w-100">
+            Clear
+        </a>
     </div>
 
 </form>
@@ -46,6 +52,7 @@
                     <th>Workout Name</th>
                     <th>Type</th>
                     <th>Duration</th>
+                    <th>Calories</th>
                 </tr>
             </thead>
 
@@ -70,6 +77,10 @@
                         <td>
                             <%= workout.duration %> mins
                         </td>
+                        
+                        <td>
+                            <%= workout.calories %> kcal
+                        </td>
 
                     </tr>
 
@@ -85,7 +96,6 @@
               Add Workout
             </a>
 
-            /
 
         </div>
 

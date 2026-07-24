@@ -15,10 +15,10 @@ app.set('view engine', 'ejs');
 
 // Database Connection
 const db = mysql.createConnection({
-    host: 'c237-eaint-mysql.mysql.database.azure.com',
-    user: 'c237_029',
-    password: 'c237029@2026!',
-    database: 'c237_029_teamuniqueandshort'
+    host: 'localhost',
+    user: 'root',
+    password: 'YOUR_PASSWORD',
+    database: 'gymdb'
 });
 
 db.connect((err) => {
@@ -75,21 +75,17 @@ app.get('/addWorkout', isAuthenticated, (req, res) => {
 // Create Workout
 app.post('/addWorkout', isAuthenticated, (req, res) => {
 
-    const {
-        workoutName,
-        workoutType,
-        duration
-    } = req.body;
+    const { workoutName, workoutType, duration } = req.body;
 
     const sql = `
         INSERT INTO workouts
-        (workoutName, workoutType, duration)
-        VALUES (?, ?, ?)
+        (workoutName, workoutType, duration, calories)
+        VALUES (?, ?, ?, ?)
     `;
 
     db.query(
         sql,
-        [workoutName, workoutType, duration],
+        [ workoutName,workoutType,duration,calories],
         (err, result) => {
 
             if (err) throw err;
@@ -100,29 +96,18 @@ app.post('/addWorkout', isAuthenticated, (req, res) => {
 });
 
 // View Workouts
-app.get('/workouts', isAuthenticated, (req, res) => {
+app.get('/workouts', (req, res) => {
 
-    const search = req.query.search || '';
+    const sql = 'SELECT * FROM workouts';
 
-    const sql = `
-        SELECT *
-        FROM workouts
-        WHERE workoutName LIKE ?
-    `;
-
-    db.query(
-        sql,
-        [`%${search}%`],
-        (err, results) => {
+    db.query(sql, (err, results) => {
 
             if (err) throw err;
 
-            res.render('workouts', {
-                workouts: results,
-                search: search
-            });
-        }
-    );
+        res.render('workouts', {
+            workouts: results
+        });
+    });
 });
 
 
