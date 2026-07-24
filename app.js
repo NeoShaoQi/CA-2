@@ -483,24 +483,23 @@ app.get('/bmi', isAuthenticated, (req, res) => {
 
 });
 
-// Calculate BMI
 app.post('/bmi', isAuthenticated, (req, res) => {
 
-    const weight = parseFloat(req.body.weight);
-    const height = parseFloat(req.body.height);
+    const { weight, height } = req.body;
 
-    const bmiValue = weight / Math.pow(height / 100, 2);
-    const bmi = bmiValue.toFixed(2);
+    const bmi = (
+        weight / ((height / 100) * (height / 100))
+    ).toFixed(2);
 
     let category = '';
 
-    if (bmiValue < 18.5) {
+    if (bmi < 18.5) {
         category = 'Underweight';
     }
-    else if (bmiValue < 25) {
+    else if (bmi < 25) {
         category = 'Normal Weight';
     }
-    else if (bmiValue < 30) {
+    else if (bmi < 30) {
         category = 'Overweight';
     }
     else {
