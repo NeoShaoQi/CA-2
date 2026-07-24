@@ -15,10 +15,10 @@ app.set('view engine', 'ejs');
 
 // Database Connection
 const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'YOUR_PASSWORD',
-    database: 'gymdb'
+    host: 'c237-eaint-mysql.mysql.database.azure.com',
+    user: 'c237_029',
+    password: 'c237029@2026!',
+    database: 'c237_029_teamuniqueandshort',
 });
 
 db.connect((err) => {
