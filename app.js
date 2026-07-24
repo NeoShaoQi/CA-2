@@ -11,8 +11,8 @@ app.set('view engine', 'ejs');
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'YOUR_PASSWORD',
-    database: 'gymdb'
+    password: 'YOUR_MYSQL_PASSWORD',
+    database: 'c237_029_teamuniqueandshort'
 });
 
 db.connect((err) => {
