@@ -137,7 +137,7 @@ app.get('/workouts', (req, res) => {
 // Displays selected workout for editing.
 // ==========================================================
 
-app.get('/editWorkout/:id', isAuthenticated, (req, res) => {
+app.get('/editWorkout/:id', isAuthenticated, isAdmin , (req, res) => {
 
     db.query(
         'SELECT * FROM workouts WHERE id=?',
@@ -160,7 +160,7 @@ app.get('/editWorkout/:id', isAuthenticated, (req, res) => {
 // Updates workout information.
 // ==========================================================
 
-app.post('/editWorkout/:id', isAuthenticated, (req, res) => {
+app.post('/editWorkout/:id', isAuthenticated, isAdmin, (req, res) => {
 
     const {
         workoutName,
@@ -202,7 +202,7 @@ app.post('/editWorkout/:id', isAuthenticated, (req, res) => {
 // Deletes selected workout.
 // ==========================================================
 
-app.get('/deleteWorkout/:id', isAuthenticated, (req, res) => {
+app.get('/deleteWorkout/:id', isAuthenticated, isAdmin, (req, res) => {
 
     db.query(
         'DELETE FROM workouts WHERE id=?',
@@ -221,13 +221,13 @@ app.get('/deleteWorkout/:id', isAuthenticated, (req, res) => {
 // ====================
 
 // Display Add Calories Form
-app.get('/addCalories', isAuthenticated, (req, res) => {
+app.get('/addCalories', isAuthenticated, isAdmin, (req, res) => {
     res.render('addCalories');
 });
 
 
 // Create Calorie Entry
-app.post('/addCalories', isAuthenticated, (req, res) => {
+app.post('/addCalories', isAuthenticated,isAdmin, (req, res) => {
 
     const {
         foodName,
@@ -261,7 +261,7 @@ app.post('/addCalories', isAuthenticated, (req, res) => {
 
 
 // View Calories
-app.get('/calories', isAuthenticated, (req, res) => {
+app.get('/calories', isAuthenticated,isAdmin, (req, res) => {
 
     const sql = 'SELECT * FROM calories';
 
@@ -290,7 +290,7 @@ app.get('/calories', isAuthenticated, (req, res) => {
 // Displays the selected calorie entry for editing.
 // ==========================================================
 
-app.get('/editCalories/:id', isAuthenticated, (req, res) => {
+app.get('/editCalories/:id', isAuthenticated, isAdmin,(req, res) => {
 
     db.query(
         'SELECT * FROM calories WHERE id=?',
@@ -314,7 +314,7 @@ app.get('/editCalories/:id', isAuthenticated, (req, res) => {
 // Updates an existing calorie record.
 // ==========================================================
 
-app.post('/editCalories/:id', isAuthenticated, (req, res) => {
+app.post('/editCalories/:id', isAuthenticated,isAdmin, (req, res) => {
 
     const {
         foodName,
@@ -356,7 +356,7 @@ app.post('/editCalories/:id', isAuthenticated, (req, res) => {
 // Deletes the selected calorie record.
 // ==========================================================
 
-app.get('/deleteCalories/:id', isAuthenticated, (req, res) => {
+app.get('/deleteCalories/:id', isAuthenticated, isAdmin,(req, res) => {
 
     db.query(
         'DELETE FROM calories WHERE id=?',
@@ -449,6 +449,7 @@ app.get('/users',
         });
 
 });
+
 // ====================
 // SERVER
 // ====================
