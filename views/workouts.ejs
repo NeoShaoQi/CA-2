@@ -87,8 +87,18 @@
                         <th>Duration</th>
                         <th>Calories Burned</th>
 
-                        <% if (currentUser && currentUser.role === 'admin') { %>
-                            <th width="180">Actions</th>
+                        <% if (currentUser.role === 'admin') { %>
+
+                            <th width="220">
+                                Actions
+                            </th>
+
+                        <% } else { %>
+
+                            <th width="170">
+                                Details
+                            </th>
+
                         <% } %>
 
                     </tr>
@@ -97,79 +107,104 @@
 
                 <tbody>
 
-                    <% if (workouts.length > 0) { %>
+                <% if (workouts.length > 0) { %>
 
-                        <% workouts.forEach(workout => { %>
+                    <% workouts.forEach(workout => { %>
 
-                        <tr>
+                    <tr>
 
-                            <td><%= workout.id %></td>
+                        <td>
+                            <%= workout.id %>
+                        </td>
 
-                            <td>
-                                <strong><%= workout.workoutName %></strong>
-                            </td>
+                        <td>
 
-                            <td>
-                                <span class="badge bg-primary">
-                                    <%= workout.workoutType %>
-                                </span>
-                            </td>
+                            <strong>
+                                <%= workout.workoutName %>
+                            </strong>
 
-                            <td>
-                                <%= workout.duration %> mins
-                            </td>
+                        </td>
 
-                            <td>
-                                🔥 <%= workout.calories %> kcal
-                            </td>
+                        <td>
 
-                            <% if (currentUser && currentUser.role === 'admin') { %>
+                            <span class="badge bg-primary">
+                                <%= workout.workoutType %>
+                            </span>
 
-                            <td>
+                        </td>
 
-                                <a href="/editWorkout/<%= workout.id %>"
-                                   class="btn btn-warning btn-sm">
+                        <td>
 
-                                    Edit
+                            <%= workout.duration %> mins
 
-                                </a>
+                        </td>
 
-                                <a href="/deleteWorkout/<%= workout.id %>"
-                                   class="btn btn-danger btn-sm"
-                                   onclick="return confirm('Delete this workout?')">
+                        <td>
 
-                                    Delete
+                            🔥 <%= workout.calories %> kcal
 
-                                </a>
+                        </td>
 
-                            </td>
+                        <% if (currentUser.role === 'admin') { %>
 
-                            <% } %>
+                        <td>
 
-                        </tr>
+                            <a href="/editWorkout/<%= workout.id %>"
+                               class="btn btn-warning btn-sm">
 
-                        <% }) %>
+                                ✏ Edit
 
-                    <% } else { %>
+                            </a>
 
-                        <tr>
+                            <a href="/deleteWorkout/<%= workout.id %>"
+                               class="btn btn-danger btn-sm"
+                               onclick="return confirm('Delete this workout?')">
 
-                            <td colspan="<%= currentUser && currentUser.role === 'admin' ? 6 : 5 %>"
-                                class="text-center">
+                                🗑 Delete
 
-                                No workouts found.
+                            </a>
 
-                            </td>
+                        </td>
 
-                        </tr>
+                        <% } else { %>
 
-                    <% } %>
+                        <td>
+
+                            <a href="/workout/<%= workout.id %>"
+                               class="btn btn-primary btn-sm">
+
+                                👁 View Workout
+
+                            </a>
+
+                        </td>
+
+                        <% } %>
+
+                    </tr>
+
+                    <% }) %>
+
+                <% } else { %>
+
+                    <tr>
+
+                        <td colspan="6"
+                            class="text-center">
+
+                            No workouts found.
+
+                        </td>
+
+                    </tr>
+
+                <% } %>
 
                 </tbody>
 
             </table>
 
-            <% if (currentUser && currentUser.role === 'admin') { %>
+            <% if (currentUser.role === 'admin') { %>
 
             <div class="mt-4">
 
