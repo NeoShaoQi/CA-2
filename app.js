@@ -75,6 +75,32 @@ app.get('/addWorkout', isAuthenticated,isAdmin, (req, res) => {
     res.render('addWorkout');
 });
 
+// ====================
+// WORKOUT DETAILS
+// ====================
+
+app.get('/workout/:id', isAuthenticated, (req, res) => {
+
+    db.query(
+        'SELECT * FROM workouts WHERE id = ?',
+        [req.params.id],
+        (err, results) => {
+
+            if (err) throw err;
+
+            if (results.length === 0) {
+                return res.redirect('/workouts');
+            }
+
+            res.render('workoutDetails', {
+                workout: results[0]
+            });
+
+        }
+    );
+
+});
+
 
 // Create Workout
 // ==========================================================
@@ -244,6 +270,39 @@ app.get('/deleteWorkout/:id', isAuthenticated, isAdmin, (req, res) => {
 // Display Add Calories Form
 app.get('/addCalories', isAuthenticated,isAdmin, (req, res) => {
     res.render('addCalories');
+});
+
+// ====================
+// FOOD DETAILS
+// ====================
+
+app.get('/food/:id', isAuthenticated, (req, res) => {
+
+    db.query(
+        'SELECT * FROM calories WHERE id = ?',
+        [req.params.id],
+        (err, results) => {
+
+            if (err) throw err;
+
+            if (results.length === 0) {
+                return res.redirect('/calories');
+            }
+
+            const food = results[0];
+
+            const recommended = 2500;
+            const remaining = recommended - Number(food.calories);
+
+            res.render('foodDetails', {
+                food,
+                recommended,
+                remaining
+            });
+
+        }
+    );
+
 });
 
 
