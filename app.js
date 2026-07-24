@@ -499,54 +499,7 @@ app.post('/admin/addWorkout',
             });
 
 });
-// ====================
-// ADMIN ADD FOOD
-// ====================
-
-// Show Add Food Form
-app.get('/admin/addFood',
-    isAuthenticated,
-    isAdmin,
-    (req, res) => {
-
-        res.render('addCalories');
-
-});
-
-// Save Preset Food
-app.post('/admin/addFood',
-    isAuthenticated,
-    isAdmin,
-    (req, res) => {
-
-        const {
-            foodName,
-            calories,
-            mealType
-        } = req.body;
-
-        const sql = `
-            INSERT INTO calories
-            (foodName, calories, mealType)
-            VALUES (?, ?, ?)
-        `;
-
-        db.query(
-            sql,
-            [
-                foodName,
-                calories,
-                mealType
-            ],
-            (err) => {
-
-                if (err) throw err;
-
-                res.redirect('/calories');
-
-            });
-
-});
+/
 // ====================
 // ADMIN ADD FOOD
 // ====================
