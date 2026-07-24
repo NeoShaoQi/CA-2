@@ -42,12 +42,17 @@ app.get('/addWorkout', (req, res) => {
 // Create Workout
 app.post('/addWorkout', (req, res) => {
 
-    const { workoutName, workoutType, duration } = req.body;
+    const {
+    workoutName,
+    workoutType,
+    duration,
+    calories
+} = req.body;
 
     const sql = `
         INSERT INTO workouts
-        (workoutName, workoutType, duration)
-        VALUES (?, ?, ?)
+        (workoutName, workoutType, duration, calories)
+        VALUES (?, ?, ?, ?)
     `;
 
     db.query(
