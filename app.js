@@ -19,10 +19,10 @@ const db = mysql.createConnection({
     user: 'c237_029',
     password: 'c237029@2026!',
     database: 'c237_029_teamuniqueandshort',
-});
-ssl: {
+    ssl: {
     rejectUnauthorized: false
-}
+    }
+});
 
 db.connect((err) => {
     if (err) {
@@ -71,7 +71,7 @@ app.get('/', (req, res) => {
 // ====================
 
 // Display Add Workout Form
-app.get('/addWorkout', isAuthenticated, (req, res) => {
+app.get('/addWorkout', isAuthenticated,isAdmn, (req, res) => {
     res.render('addWorkout');
 });
 
