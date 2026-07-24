@@ -1,48 +1,85 @@
 const express = require('express');
 const mysql = require('mysql2');
 
+// Keevan: Require Session and Auth Middleware
+const session = require('express-session');
+const { isAuthenticated, isAdmin } = require('./middleware/auth');
+
 const app = express();
 
+// Middleware
 app.use(express.urlencoded({ extended: false }));
 
+// EJS
 app.set('view engine', 'ejs');
 
 // Database Connection
 const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'YOUR_PASSWORD',
-    database: 'gymdb'
+    host: 'c237-eaint-mysql.mysql.database.azure.com',
+    user: 'c237_029',
+    password: 'c237029@2026!',
+    database: 'c237_029_teamuniqueandshort'
 });
 
 db.connect((err) => {
-    if (err) throw err;
+    if (err) {
+        throw err;
+    }
+
     console.log('Connected to MySQL');
 });
 
 
-// =====================
-// HOME PAGE
-// =====================
+// ====================
+// SESSION SETUP
+// ====================
+
+app.use(session({
+    secret: 'c237_gym_tracker_secret_key',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 3600000
+    }
+}));
+
+// Make user session data available in all EJS pages
+app.use((req, res, next) => {
+    res.locals.currentUser = req.session.user || null;
+    next();
+});
+
+// Auth Routes
+const authRoutes = require('./routes/auth')(db);
+app.use('/', authRoutes);
+
+
+// ====================
+// HOME
+// ====================
 
 app.get('/', (req, res) => {
     res.render('index');
 });
 
 
-// =====================
+// ====================
 // WORKOUT ROUTES
-// =====================
+// ====================
 
-// Show Add Workout Form
-app.get('/addWorkout', (req, res) => {
+// Display Add Workout Form
+app.get('/addWorkout', isAuthenticated, (req, res) => {
     res.render('addWorkout');
 });
 
 // Create Workout
-app.post('/addWorkout', (req, res) => {
+app.post('/addWorkout', isAuthenticated, (req, res) => {
 
-    const { workoutName, workoutType, duration } = req.body;
+    const {
+        workoutName,
+        workoutType,
+        duration
+    } = req.body;
 
     const sql = `
         INSERT INTO workouts
@@ -63,34 +100,49 @@ app.post('/addWorkout', (req, res) => {
 });
 
 // View Workouts
-app.get('/workouts', (req, res) => {
+app.get('/workouts', isAuthenticated, (req, res) => {
 
-    const sql = 'SELECT * FROM workouts';
+    const search = req.query.search || '';
 
-    db.query(sql, (err, results) => {
+    const sql = `
+        SELECT *
+        FROM workouts
+        WHERE workoutName LIKE ?
+    `;
+
+    db.query(
+        sql,
+        [`%${search}%`],
+        (err, results) => {
 
             if (err) throw err;
 
-        res.render('workouts', {
-            workouts: results
-        });
-    });
+            res.render('workouts', {
+                workouts: results,
+                search: search
+            });
+        }
+    );
 });
 
 
-// =====================
+// ====================
 // CALORIE ROUTES
-// =====================
+// ====================
 
-// Show Add Calories Form
-app.get('/addCalories', (req, res) => {
+// Display Add Calories Form
+app.get('/addCalories', isAuthenticated, (req, res) => {
     res.render('addCalories');
 });
 
-// Add Calories
-app.post('/addCalories', (req, res) => {
+// Create Calorie Entry
+app.post('/addCalories', isAuthenticated, (req, res) => {
 
-    const { foodName, calories, mealType } = req.body;
+    const {
+        foodName,
+        calories,
+        mealType
+    } = req.body;
 
     const sql = `
         INSERT INTO calories
@@ -111,35 +163,34 @@ app.post('/addCalories', (req, res) => {
 });
 
 // View Calories
-app.get('/calories', (req, res) => {
+app.get('/calories', isAuthenticated, (req, res) => {
 
-    db.query(
-        'SELECT * FROM calories',
-        (err, results) => {
+    const sql = 'SELECT * FROM calories';
 
-            if (err) throw err;
+    db.query(sql, (err, results) => {
 
-            let totalCalories = 0;
+        if (err) throw err;
 
-            results.forEach(item => {
-                totalCalories += Number(item.calories);
-            });
+        let totalCalories = 0;
 
-            res.render('calories', {
-                calories: results,
-                totalCalories: totalCalories
-            });
-        }
-    );
+        results.forEach(item => {
+            totalCalories += Number(item.calories);
+        });
+
+        res.render('calories', {
+            calories: results,
+            totalCalories: totalCalories
+        });
+    });
 });
 
 
-// =====================
+// ====================
 // BMI ROUTES
-// =====================
+// ====================
 
-// Display BMI Form
-app.get('/bmi', (req, res) => {
+// Display BMI Calculator
+app.get('/bmi', isAuthenticated, (req, res) => {
 
     res.render('bmi', {
         bmi: null,
@@ -149,7 +200,7 @@ app.get('/bmi', (req, res) => {
 });
 
 // Calculate BMI
-app.post('/bmi', (req, res) => {
+app.post('/bmi', isAuthenticated, (req, res) => {
 
     const { weight, height } = req.body;
 
@@ -173,16 +224,48 @@ app.post('/bmi', (req, res) => {
     }
 
     res.render('bmi', {
-        bmi: bmi,
-        category: category
+        bmi,
+        category
     });
 
 });
 
+// ====================
+// ADMIN ROUTES
+// ====================
 
-// =====================
+app.get('/admin',
+    isAuthenticated,
+    isAdmin,
+    (req, res) => {
+
+        res.render('admin');
+
+});
+
+
+app.get('/users',
+    isAuthenticated,
+    isAdmin,
+    (req, res) => {
+
+        const sql = 'SELECT * FROM users';
+
+        db.query(sql, (err, results) => {
+
+            if (err) throw err;
+
+            res.render('users', {
+                users: results
+            });
+
+        });
+
+});
+
+// ====================
 // SERVER
-// =====================
+// ====================
 
 app.listen(3000, () => {
     console.log('Server running on http://localhost:3000');
