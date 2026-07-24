@@ -1,43 +1,69 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Add Exercise</title>
+    <title>Add Workout</title>
+
+    .net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
 </head>
-<body>
 
-    <h1>Add Exercise</h1>
+<body class="bg-light">
 
-    /addExercise="POST">
+<div class="container mt-5">
 
-        <label>Exercise Name</label><br>
-        <input type="text" name="exerciseName" required>
+    <div class="card shadow p-4">
 
-        <br><br>
+        <h2 class="text-primary mb-4">Add Workout</h2>
 
-        <label>Muscle Group</label><br>
-        <input type="text" name="muscleGroup" required>
+        /addWorkout
 
-        <br><br>
+            <div class="mb-3">
+                <label class="form-label">Workout Name</label>
+                <input
+                    type="text"
+                    name="workoutName"
+                    class="form-control"
+                    required>
+            </div>
 
-        <label>Sets</label><br>
-        <input type="number" name="sets" required>
+            <div class="mb-3">
+                <label class="form-label">Workout Type</label>
+                <select
+                    name="workoutType"
+                    class="form-select"
+                    required>
 
-        <br><br>
+                    <option value="Strength">Strength</option>
+                    <option value="Cardio">Cardio</option>
+                    <option value="Flexibility">Flexibility</option>
+                    <option value="HIIT">HIIT</option>
 
-        <label>Reps</label><br>
-        <input type="number" name="reps" required>
+                </select>
+            </div>
 
-        <br><br>
+            <div class="mb-3">
+                <label class="form-label">Duration (minutes)</label>
+                <input
+                    type="number"
+                    name="duration"
+                    class="form-control"
+                    required>
+            </div>
 
-        <button type="submit">
-            Add Exercise
-        </button>
+            <button type="submit"
+                    class="btn btn-success">
+                Add Workout
+            </button>
 
-    </form>
+            /
+                Home
+            </a>
 
-    <br>
+        </form>
 
-    <
+    </div>
+
+</div>
 
 </body>
 </html>

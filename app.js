@@ -3,76 +3,153 @@ const mysql = require('mysql2');
 
 const app = express();
 
-app.set('view engine', 'ejs');
-
+// Middleware
 app.use(express.urlencoded({ extended: false }));
 
-// Database connection
+// EJS
+app.set('view engine', 'ejs');
+
+// Database Connection
 const db = mysql.createConnection({
     host: 'c237-eaint-mysql.mysql.database.azure.com',
     user: 'c237_029',
     password: 'c237029@2026!',
-    database: 'c237_029_teamunqiueandshort'
+    database: 'c237_029_teamuniqueandshort',
 });
 
 db.connect((err) => {
-    if (err) throw err;
+    if (err) {
+        throw err;
+    }
+
     console.log('Connected to MySQL');
 });
 
-// Home Page
+
+// ====================
+// HOME
+// ====================
+
 app.get('/', (req, res) => {
     res.render('index');
 });
 
-// Display Add Exercise Form
-app.get('/addExercise', (req, res) => {
-    res.render('addExercise');
+
+// ====================
+// WORKOUT ROUTES
+// ====================
+
+// Display Add Workout Form
+app.get('/addWorkout', (req, res) => {
+    res.render('addWorkout');
 });
 
-// CREATE
-app.post('/addExercise', (req, res) => {
+// Create Workout
+app.post('/addWorkout', (req, res) => {
 
     const {
-        exerciseName,
-        muscleGroup,
-        sets,
-        reps
+        workoutName,
+        workoutType,
+        duration
     } = req.body;
 
     const sql = `
-        INSERT INTO exercises
-        (exerciseName, muscleGroup, sets, reps)
-        VALUES (?, ?, ?, ?)
+        INSERT INTO workouts
+        (workoutName, workoutType, duration)
+        VALUES (?, ?, ?)
     `;
 
     db.query(
         sql,
-        [exerciseName, muscleGroup, sets, reps],
+        [workoutName, workoutType, duration],
         (err, result) => {
 
             if (err) throw err;
 
-            res.redirect('/exercises');
+            res.redirect('/workouts');
         }
     );
 });
 
-// READ
-app.get('/exercises', (req, res) => {
+// View All Workouts
+app.get('/workouts', (req, res) => {
 
-    const sql = "SELECT * FROM exercises";
+    const sql = 'SELECT * FROM workouts';
 
     db.query(sql, (err, results) => {
 
         if (err) throw err;
 
-        res.render('exercises', {
-            exercises: results
+        res.render('workouts', {
+            workouts: results
         });
     });
 });
 
+
+// ====================
+// CALORIE ROUTES
+// ====================
+
+// Display Add Calories Form
+app.get('/addCalories', (req, res) => {
+    res.render('addCalories');
+});
+
+// Create Calorie Entry
+app.post('/addCalories', (req, res) => {
+
+    const {
+        foodName,
+        calories,
+        mealType
+    } = req.body;
+
+    const sql = `
+        INSERT INTO calories
+        (foodName, calories, mealType)
+        VALUES (?, ?, ?)
+    `;
+
+    db.query(
+        sql,
+        [foodName, calories, mealType],
+        (err, result) => {
+
+            if (err) throw err;
+
+            res.redirect('/calories');
+        }
+    );
+});
+
+// View Calories
+app.get('/calories', (req, res) => {
+
+    const sql = 'SELECT * FROM calories';
+
+    db.query(sql, (err, results) => {
+
+        if (err) throw err;
+
+        let totalCalories = 0;
+
+        results.forEach(item => {
+            totalCalories += item.calories;
+        });
+
+        res.render('calories', {
+            calories: results,
+            totalCalories: totalCalories
+        });
+    });
+});
+
+
+// ====================
+// SERVER
+// ====================
+
 app.listen(3000, () => {
-    console.log('Server running on port 3000');
+    console.log('Server running on http://localhost:3000');
 });

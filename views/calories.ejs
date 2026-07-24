@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calorie Tracker</title>
+    .3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+
+    <div class="card shadow p-4">
+
+        <h1>Calorie Tracker</h1>
+
+        <div class="alert alert-info">
+            Total Calories:
+            <strong><%= totalCalories %></strong>
+        </div>
+
+        <table class="table table-striped">
+
+            <thead class="table-dark">
+                <tr>
+                    <th>Food</th>
+                    <th>Calories</th>
+                    <th>Meal Type</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <% calories.forEach(item => { %>
+
+                    <tr>
+                        <td><%= item.foodName %></td>
+                        <td><%= item.calories %></td>
+                        <td><%= item.mealType %></td>
+                    </tr>
+
+                <% }) %>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+</html>
