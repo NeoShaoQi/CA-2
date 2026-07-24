@@ -65,16 +65,25 @@ app.post('/addWorkout', (req, res) => {
 // View Workouts
 app.get('/workouts', (req, res) => {
 
-    const sql = 'SELECT * FROM workouts';
+    const search = req.query.search || '';
 
-    db.query(sql, (err, results) => {
+    const sql = `
+        SELECT *
+        FROM workouts
+        WHERE workoutName LIKE ?
+    `;
 
-            if (err) throw err;
+    db.query(sql, [`%${search}%`], (err, results) => {
+
+        if (err) throw err;
 
         res.render('workouts', {
-            workouts: results
+            workouts: results,
+            search: search
         });
+
     });
+
 });
 
 
