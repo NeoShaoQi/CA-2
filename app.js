@@ -20,6 +20,9 @@ const db = mysql.createConnection({
     password: 'c237029@2026!',
     database: 'c237_029_teamuniqueandshort',
 });
+ssl: {
+    rejectUnauthorized: false
+}
 
 db.connect((err) => {
     if (err) {
@@ -447,105 +450,6 @@ app.get('/users',
             });
 
         });
-
-});
-// ====================
-// ADMIN ADD WORKOUT
-// ====================
-
-// Show Add Workout Form
-app.get('/admin/addWorkout',
-    isAuthenticated,
-    isAdmin,
-    (req, res) => {
-
-        res.render('addWorkout');
-
-});
-
-// Save Preset Workout
-app.post('/admin/addWorkout',
-    isAuthenticated,
-    isAdmin,
-    (req, res) => {
-
-        const {
-            workoutName,
-            workoutType,
-            duration,
-            calories
-        } = req.body;
-
-        const sql = `
-            INSERT INTO workouts
-            (workoutName, workoutType, duration, calories)
-            VALUES (?, ?, ?, ?)
-        `;
-
-        db.query(
-            sql,
-            [
-                workoutName,
-                workoutType,
-                duration,
-                calories
-            ],
-            (err) => {
-
-                if (err) throw err;
-
-                res.redirect('/workouts');
-
-            });
-
-});
-/
-// ====================
-// ADMIN ADD FOOD
-// ====================
-
-// Show Add Food Form
-app.get('/admin/addFood',
-    isAuthenticated,
-    isAdmin,
-    (req, res) => {
-
-        res.render('addCalories');
-
-});
-
-// Save Preset Food
-app.post('/admin/addFood',
-    isAuthenticated,
-    isAdmin,
-    (req, res) => {
-
-        const {
-            foodName,
-            calories,
-            mealType
-        } = req.body;
-
-        const sql = `
-            INSERT INTO calories
-            (foodName, calories, mealType)
-            VALUES (?, ?, ?)
-        `;
-
-        db.query(
-            sql,
-            [
-                foodName,
-                calories,
-                mealType
-            ],
-            (err) => {
-
-                if (err) throw err;
-
-                res.redirect('/calories');
-
-            });
 
 });
 
