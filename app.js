@@ -449,6 +449,56 @@ app.get('/users',
         });
 
 });
+// ====================
+// ADMIN ADD WORKOUT
+// ====================
+
+// Show Add Workout Form
+app.get('/admin/addWorkout',
+    isAuthenticated,
+    isAdmin,
+    (req, res) => {
+
+        res.render('addWorkout');
+
+});
+
+// Save Preset Workout
+app.post('/admin/addWorkout',
+    isAuthenticated,
+    isAdmin,
+    (req, res) => {
+
+        const {
+            workoutName,
+            workoutType,
+            duration,
+            calories
+        } = req.body;
+
+        const sql = `
+            INSERT INTO workouts
+            (workoutName, workoutType, duration, calories)
+            VALUES (?, ?, ?, ?)
+        `;
+
+        db.query(
+            sql,
+            [
+                workoutName,
+                workoutType,
+                duration,
+                calories
+            ],
+            (err) => {
+
+                if (err) throw err;
+
+                res.redirect('/workouts');
+
+            });
+
+});
 
 // ====================
 // SERVER
