@@ -324,21 +324,12 @@ app.get('/food/:id', isAuthenticated, (req, res) => {
                     if (req.session.remainingCalories == null) {
                         req.session.remainingCalories = recommended;
                     }
-                    
-                    // Subtract this food's calories
-                    req.session.remainingCalories -= Number(food.calories);
-                    
-                    // Don't allow it to go below 0
-                    if (req.session.remainingCalories < 0) {
-                        req.session.remainingCalories = 0;
-                    }
-                    
+
                     res.render('foodDetails', {
                         food,
                         recommended,
                         remaining: req.session.remainingCalories
                     });
-
                 }
             );
 
@@ -484,16 +475,14 @@ app.get('/calories', isAuthenticated, (req, res) => {
 
                     if (err) throw err;
 
-                    res.render('calories', {
+                   res.render('calories', {
                         calories: results,
                         totalCalories,
                         search,
-                        health: {
-                            ...userResult[0],
-                            remainingCalories:
-                                req.session.remainingCalories ??
-                                userResult[0].dailyCalorieGoal
-                        }
+                        health: userResult[0],
+                        remainingCalories:
+                            req.session.remainingCalories ??
+                            userResult[0].dailyCalorieGoal
                     });
 
                 }
