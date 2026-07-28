@@ -167,12 +167,24 @@
 
                 <% } %>
 
-                <a href="/calories"
-                   class="btn btn-secondary mt-3">
+                <form action="/eatFood/<%= food.id %>" method="POST">
 
-                    ⬅ Back to Food Library
-
-                </a>
+                    <button
+                        type="submit"
+                        class="btn btn-success mt-3">
+                
+                        🍽 Confirm Eat
+                
+                    </button>
+                
+                    <a href="/calories"
+                       class="btn btn-secondary mt-3">
+                
+                        ⬅ Back to Food Library
+                
+                    </a>
+                
+                </form>
 
             </div>
 
