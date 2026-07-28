@@ -493,11 +493,13 @@ app.get('/bmi', isAuthenticated, (req, res) => {
 
     res.render('bmi', {
         bmi: null,
-        category: null
+        category: null,
+        targetWeight: null,
+        weightToLose: null,
+        dailyCalorieGoal: null
     });
 
 });
-
 app.post('/bmi', isAuthenticated, (req, res) => {
 
     const { weight, height } = req.body;
