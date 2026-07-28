@@ -151,7 +151,7 @@ app.get('/workouts', isAuthenticated, (req, res) => {
 
     const search = req.query.search || '';
 
-    const sql = `
+    const workoutSql = `
         SELECT *
         FROM workouts
         WHERE workoutName LIKE ?
@@ -159,25 +159,40 @@ app.get('/workouts', isAuthenticated, (req, res) => {
     `;
 
     db.query(
-        sql,
-        [
-            `%${search}%`,
-            `%${search}%`
-        ],
-        (err, results) => {
+        workoutSql,
+        [`%${search}%`, `%${search}%`],
+        (err, workouts) => {
 
             if (err) throw err;
 
-            res.render('workouts', {
-                workouts: results,
-                search: search
-            });
+            db.query(
+                `
+                SELECT
+                    bmi,
+                    targetWeight,
+                    weightToLose,
+                    dailyCalorieGoal
+                FROM users
+                WHERE id = ?
+                `,
+                [req.session.user.id],
+                (err, userResult) => {
+
+                    if (err) throw err;
+
+                    res.render('workouts', {
+                        workouts,
+                        search,
+                        health: userResult[0]
+                    });
+
+                }
+            );
 
         }
     );
 
 });
-
 
 // ==========================================================
 // (ALTON) - EDIT WORKOUT
