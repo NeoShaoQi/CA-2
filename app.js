@@ -386,11 +386,30 @@ app.get('/calories', isAuthenticated, (req, res) => {
                 totalCalories += Number(item.calories);
             });
 
-            res.render('calories', {
-                calories: results,
-                totalCalories: totalCalories,
-                search: search
-            });
+            db.query(
+                `
+                SELECT
+                    bmi,
+                    targetWeight,
+                    weightToLose,
+                    dailyCalorieGoal
+                FROM users
+                WHERE id = ?
+                `,
+                [req.session.user.id],
+                (err, userResult) => {
+
+                    if (err) throw err;
+
+                    res.render('calories', {
+                        calories: results,
+                        totalCalories,
+                        search,
+                        health: userResult[0]
+                    });
+
+                }
+            );
 
         }
     );
