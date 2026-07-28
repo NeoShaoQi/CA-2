@@ -32,6 +32,57 @@
                 </a>
 
             </div>
+            <% if (health && health.bmi) { %>
+
+<div class="card border-success shadow-sm mb-4">
+
+    <div class="card-body">
+
+        <h4 class="text-success mb-3">
+            🍎 Your Nutrition Goal
+        </h4>
+
+        <div class="row text-center">
+
+            <div class="col-md-3">
+
+                <h6>BMI</h6>
+
+                <h4><%= health.bmi %></h4>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <h6>Weight To Lose</h6>
+
+                <h4><%= health.weightToLose %> kg</h4>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <h6>Daily Calories</h6>
+
+                <h4><%= health.dailyCalorieGoal %> kcal</h4>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <h6>Weekly Goal</h6>
+
+                <h4>0.5 kg/week</h4>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<% } %>
 
             <!-- Search -->
 
