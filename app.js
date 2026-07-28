@@ -320,13 +320,23 @@ app.get('/food/:id', isAuthenticated, (req, res) => {
                     const recommended =
                         userResults[0]?.dailyCalorieGoal || 2500;
 
-                    const remaining =
-                        recommended - Number(food.calories);
-
+                   // If the session hasn't been initialized yet
+                    if (req.session.remainingCalories == null) {
+                        req.session.remainingCalories = recommended;
+                    }
+                    
+                    // Subtract this food's calories
+                    req.session.remainingCalories -= Number(food.calories);
+                    
+                    // Don't allow it to go below 0
+                    if (req.session.remainingCalories < 0) {
+                        req.session.remainingCalories = 0;
+                    }
+                    
                     res.render('foodDetails', {
                         food,
                         recommended,
-                        remaining
+                        remaining: req.session.remainingCalories
                     });
 
                 }
