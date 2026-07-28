@@ -619,6 +619,8 @@ app.post('/bmi', isAuthenticated, (req, res) => {
         (err) => {
 
             if (err) throw err;
+            // Save today's remaining calories in the session
+            req.session.remainingCalories = dailyCalorieGoal;
 
             res.render('bmi', {
                 bmi,
