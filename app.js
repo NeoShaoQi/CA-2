@@ -347,6 +347,63 @@ app.get('/food/:id', isAuthenticated, (req, res) => {
 
 });
 
+app.post('/eatFood/:id', isAuthenticated, (req, res) => {
+
+    db.query(
+        'SELECT calories FROM calories WHERE id = ?',
+        [req.params.id],
+        (err, results) => {
+
+            if (err) throw err;
+
+            if (results.length === 0) {
+                return res.redirect('/calories');
+            }
+
+            const foodCalories = Number(results[0].calories);
+
+            // If session hasn't been initialized
+            if (req.session.remainingCalories == null) {
+
+                db.query(
+                    'SELECT dailyCalorieGoal FROM users WHERE id = ?',
+                    [req.session.user.id],
+                    (err, userResult) => {
+
+                        if (err) throw err;
+
+                        req.session.remainingCalories =
+                            userResult[0].dailyCalorieGoal;
+
+                        req.session.remainingCalories -= foodCalories;
+
+                        if (req.session.remainingCalories < 0) {
+                            req.session.remainingCalories = 0;
+                        }
+
+                        res.redirect('/calories');
+
+                    }
+                );
+
+            }
+            else {
+
+                req.session.remainingCalories -= foodCalories;
+
+                if (req.session.remainingCalories < 0) {
+                    req.session.remainingCalories = 0;
+                }
+
+                res.redirect('/calories');
+
+            }
+
+        }
+    );
+
+});
+
 // Create Calorie Entry
 app.post('/addCalories', isAuthenticated,isAdmin, (req, res) => {
 
