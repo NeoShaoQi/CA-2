@@ -488,7 +488,12 @@ app.get('/calories', isAuthenticated, (req, res) => {
                         calories: results,
                         totalCalories,
                         search,
-                        health: userResult[0]
+                        health: {
+                            ...userResult[0],
+                            remainingCalories:
+                                req.session.remainingCalories ??
+                                userResult[0].dailyCalorieGoal
+                        }
                     });
 
                 }
