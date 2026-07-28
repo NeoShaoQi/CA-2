@@ -493,6 +493,29 @@ app.get('/calories', isAuthenticated, (req, res) => {
 
 });
 
+// ====================
+// RESET REMAINING CALORIES
+// ====================
+
+app.get('/resetCalories', isAuthenticated, (req, res) => {
+
+    db.query(
+        'SELECT dailyCalorieGoal FROM users WHERE id = ?',
+        [req.session.user.id],
+        (err, results) => {
+
+            if (err) throw err;
+
+            req.session.remainingCalories =
+                results[0].dailyCalorieGoal;
+
+            res.redirect('/calories');
+
+        }
+    );
+
+});
+
 
 // ==========================================================
 // (ALTON) - EDIT CALORIE ENTRY
