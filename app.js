@@ -487,10 +487,19 @@ app.post('/bmi', isAuthenticated, (req, res) => {
 
     const { weight, height } = req.body;
 
+    // Convert values to numbers
+    const currentWeight = parseFloat(weight);
+    const currentHeight = parseFloat(height);
+
+    // Convert height to metres
+    const heightInMetres = currentHeight / 100;
+
+    // Calculate BMI
     const bmi = (
-        weight / ((height / 100) * (height / 100))
+        currentWeight / (heightInMetres * heightInMetres)
     ).toFixed(2);
 
+    // Determine BMI category
     let category = '';
 
     if (bmi < 18.5) {
@@ -506,10 +515,165 @@ app.post('/bmi', isAuthenticated, (req, res) => {
         category = 'Obese';
     }
 
-    res.render('bmi', {
-        bmi,
-        category
-    });
+    // Calculate target weight (BMI 24.9)
+    const targetWeight = (24.9 * heightInMetres * heightInMetres).toFixed(2);
+
+    // Calculate weight to lose (minimum 0)
+    const weightToLose = Math.max(
+        0,
+        (currentWeight - targetWeight)
+    ).toFixed(2);
+
+    // Daily calorie goal
+    let dailyCalorieGoal;
+
+    if (bmi < 18.5) {
+        dailyCalorieGoal = 2500;
+    }
+    else if (bmi < 25) {
+        dailyCalorieGoal = 2200;
+    }
+    else if (bmi < 30) {
+        dailyCalorieGoal = 2000;
+    }
+    else {
+        dailyCalorieGoal = 1800;
+    }
+
+    // Save to database
+    const sql = `
+        UPDATE users
+        SET
+            height = ?,
+            weight = ?,
+            bmi = ?,
+            targetWeight = ?,
+            weightToLose = ?,
+            dailyCalorieGoal = ?
+        WHERE id = ?
+    `;
+
+    db.query(
+        sql,
+        [
+            currentHeight,
+            currentWeight,
+            bmi,
+            targetWeight,
+            weightToLose,
+            dailyCalorieGoal,
+            req.session.user.id
+        ],
+        (err) => {
+
+            if (err) throw err;
+
+            res.render('bmi', {
+                bmi,
+                category,
+                targetWeight,
+                weightToLose,
+                dailyCalorieGoal
+            });
+
+        }
+    );
+
+});app.post('/bmi', isAuthenticated, (req, res) => {
+
+    const { weight, height } = req.body;
+
+    // Convert values to numbers
+    const currentWeight = parseFloat(weight);
+    const currentHeight = parseFloat(height);
+
+    // Convert height to metres
+    const heightInMetres = currentHeight / 100;
+
+    // Calculate BMI
+    const bmi = (
+        currentWeight / (heightInMetres * heightInMetres)
+    ).toFixed(2);
+
+    // Determine BMI category
+    let category = '';
+
+    if (bmi < 18.5) {
+        category = 'Underweight';
+    }
+    else if (bmi < 25) {
+        category = 'Normal Weight';
+    }
+    else if (bmi < 30) {
+        category = 'Overweight';
+    }
+    else {
+        category = 'Obese';
+    }
+
+    // Calculate target weight (BMI 24.9)
+    const targetWeight = (24.9 * heightInMetres * heightInMetres).toFixed(2);
+
+    // Calculate weight to lose (minimum 0)
+    const weightToLose = Math.max(
+        0,
+        (currentWeight - targetWeight)
+    ).toFixed(2);
+
+    // Daily calorie goal
+    let dailyCalorieGoal;
+
+    if (bmi < 18.5) {
+        dailyCalorieGoal = 2500;
+    }
+    else if (bmi < 25) {
+        dailyCalorieGoal = 2200;
+    }
+    else if (bmi < 30) {
+        dailyCalorieGoal = 2000;
+    }
+    else {
+        dailyCalorieGoal = 1800;
+    }
+
+    // Save to database
+    const sql = `
+        UPDATE users
+        SET
+            height = ?,
+            weight = ?,
+            bmi = ?,
+            targetWeight = ?,
+            weightToLose = ?,
+            dailyCalorieGoal = ?
+        WHERE id = ?
+    `;
+
+    db.query(
+        sql,
+        [
+            currentHeight,
+            currentWeight,
+            bmi,
+            targetWeight,
+            weightToLose,
+            dailyCalorieGoal,
+            req.session.user.id
+        ],
+        (err) => {
+
+            if (err) throw err;
+
+            res.render('bmi', {
+                bmi,
+                category,
+                targetWeight,
+                weightToLose,
+                dailyCalorieGoal
+            });
+
+        }
+    );
 
 });
 
