@@ -296,30 +296,46 @@ app.get('/food/:id', isAuthenticated, (req, res) => {
     db.query(
         'SELECT * FROM calories WHERE id = ?',
         [req.params.id],
-        (err, results) => {
+        (err, foodResults) => {
 
             if (err) throw err;
 
-            if (results.length === 0) {
+            if (foodResults.length === 0) {
                 return res.redirect('/calories');
             }
 
-            const food = results[0];
+            const food = foodResults[0];
 
-            const recommended = 2500;
-            const remaining = recommended - Number(food.calories);
+            db.query(
+                `
+                SELECT dailyCalorieGoal
+                FROM users
+                WHERE id = ?
+                `,
+                [req.session.user.id],
+                (err, userResults) => {
 
-            res.render('foodDetails', {
-                food,
-                recommended,
-                remaining
-            });
+                    if (err) throw err;
+
+                    const recommended =
+                        userResults[0]?.dailyCalorieGoal || 2500;
+
+                    const remaining =
+                        recommended - Number(food.calories);
+
+                    res.render('foodDetails', {
+                        food,
+                        recommended,
+                        remaining
+                    });
+
+                }
+            );
 
         }
     );
 
 });
-
 
 // Create Calorie Entry
 app.post('/addCalories', isAuthenticated,isAdmin, (req, res) => {
