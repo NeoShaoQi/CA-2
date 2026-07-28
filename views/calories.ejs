@@ -62,10 +62,10 @@
 
             <div class="col-md-3">
 
-                <h6>Daily Calories</h6>
-
-                <h4><%= health.dailyCalorieGoal %> kcal</h4>
-
+                <h6>Remaining Calories</h6>
+            
+                <h4><%= remainingCalories %> kcal</h4>
+            
             </div>
 
             <div class="col-md-3">
@@ -83,6 +83,17 @@
 </div>
 
 <% } %>
+
+<div class="mb-4">
+
+    <a href="/resetCalories"
+       class="btn btn-warning">
+
+        🔄 Reset Remaining Calories
+
+    </a>
+
+</div>
 
             <!-- Search -->
 
