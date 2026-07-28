@@ -121,57 +121,178 @@
 
             </form>
 
+
             <% if (bmi) { %>
 
-            <div class="card mt-5 border-success">
+<div class="card mt-5 border-success">
 
-                <div class="card-body text-center">
+    <div class="card-body">
 
-                    <h3 class="text-success">
-                        Your BMI Result
-                    </h3>
+        <h3 class="text-success text-center mb-4">
+            🏆 Your Fitness Summary
+        </h3>
 
-                    <hr>
+        <div class="row text-center">
 
-                    <h1 class="display-4">
-                        <%= bmi %>
-                    </h1>
+            <div class="col-md-4">
 
-                    <h4 class="mt-3">
+                <h6 class="text-muted">
+                    BMI
+                </h6>
 
-                        <% if(category === "Underweight"){ %>
+                <h1 class="display-5">
+                    <%= bmi %>
+                </h1>
 
-                            <span class="badge bg-warning text-dark">
-                                <%= category %>
-                            </span>
+            </div>
 
-                        <% } else if(category === "Normal Weight"){ %>
+            <div class="col-md-4">
 
-                            <span class="badge bg-success">
-                                <%= category %>
-                            </span>
+                <h6 class="text-muted">
+                    Category
+                </h6>
 
-                        <% } else if(category === "Overweight"){ %>
+                <% if(category === "Underweight"){ %>
 
-                            <span class="badge bg-warning">
-                                <%= category %>
-                            </span>
+                    <span class="badge bg-warning text-dark fs-5">
+                        <%= category %>
+                    </span>
 
-                        <% } else { %>
+                <% } else if(category === "Normal Weight"){ %>
 
-                            <span class="badge bg-danger">
-                                <%= category %>
-                            </span>
+                    <span class="badge bg-success fs-5">
+                        <%= category %>
+                    </span>
 
-                        <% } %>
+                <% } else if(category === "Overweight"){ %>
 
-                    </h4>
+                    <span class="badge bg-warning fs-5">
+                        <%= category %>
+                    </span>
+
+                <% } else { %>
+
+                    <span class="badge bg-danger fs-5">
+                        <%= category %>
+                    </span>
+
+                <% } %>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <h6 class="text-muted">
+                    Weekly Goal
+                </h6>
+
+                <h2 class="text-primary">
+                    0.5 kg/week
+                </h2>
+
+            </div>
+
+        </div>
+
+        <hr>
+
+        <div class="row text-center">
+
+            <div class="col-md-4">
+
+                <div class="card border-primary shadow-sm">
+
+                    <div class="card-body">
+
+                        <h6 class="text-muted">
+                            🎯 Target Weight
+                        </h6>
+
+                        <h2>
+                            <%= targetWeight %> kg
+                        </h2>
+
+                    </div>
 
                 </div>
 
             </div>
 
-            <% } %>
+            <div class="col-md-4">
+
+                <div class="card border-danger shadow-sm">
+
+                    <div class="card-body">
+
+                        <h6 class="text-muted">
+                            📉 Weight To Lose
+                        </h6>
+
+                        <h2>
+                            <%= weightToLose %> kg
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="card border-success shadow-sm">
+
+                    <div class="card-body">
+
+                        <h6 class="text-muted">
+                            🍎 Daily Calorie Goal
+                        </h6>
+
+                        <h2>
+                            <%= dailyCalorieGoal %>
+                        </h2>
+
+                        <small>kcal/day</small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <% if (weightToLose > 0) { %>
+
+            <div class="alert alert-warning mt-4">
+
+                <strong>Recommendation:</strong>
+
+                You should aim to lose
+                <strong><%= weightToLose %> kg</strong>
+
+                at approximately
+
+                <strong>0.5 kg per week</strong>.
+
+            </div>
+
+        <% } else { %>
+
+            <div class="alert alert-success mt-4">
+
+                🎉 Congratulations! Your current weight is already within the healthy BMI range.
+                Focus on maintaining your fitness and eating a balanced diet.
+
+            </div>
+
+        <% } %>
+
+    </div>
+
+</div>
+
+<% } %>
 
             <div class="alert alert-secondary mt-4">
 
