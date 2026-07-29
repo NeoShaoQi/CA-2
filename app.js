@@ -1,7 +1,7 @@
 const express = require('express');
 const mysql = require('mysql2');
 
-// Keevan: Require Session and Auth Middleware
+// Require Session and Auth Middleware
 const session = require('express-session');
 const { isAuthenticated, isAdmin } = require('./middleware/auth');
 
